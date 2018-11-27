@@ -2,6 +2,8 @@
 
 Given a noisy 3D point cloud model of a real scene, the goal is to extract the planar surfaces such as walls and ground plane. In order to improve the quality or identify elements of interest, each plane extracted is transformed into an image and postprocessed as such, using techniques for image segmentation, edges detection and contour extraction. Although the present work is not focused in the walls reconstruction, the proposed algorithm offers useful results to a later realization of such task. For this algorithm the main goal was centered in the ground plane.
 
+![GUI for planes segmentation](fig_gui1.png?raw=true "GUI for Planes Segmentation")
+
 
 ## Plane Segmetation
 
@@ -44,6 +46,8 @@ With the bitmap it is possible obtain the moment of the image and so the area an
 
 As the bitmap is locate over the plane XY and the image centroid corresponds with the coordinate *(0,0,0)*, moving it to R^3 to convert any given silhouette or polygon on a bitmap to its representation as a point cloud, it is enough to project all the pixels perpendicularly from the plane; that is, assigning a value for the *z*-coordinate within an interval defined by a depth. But since not all available pixels can be transformed, it is required to establish a density to describe the permitted number of points per unit area. To reach this, a little algorithm selects the pixel (i.e. coordinate *\[x,y\]*) and performs the calculation of the *z* value making use of the Normal Distribution.
 
+![GUI for planes reconstruction](fig_gui2.png?raw=true "GUI for Planes Reconstruction")
+
 
 ## Implementation
 
@@ -52,5 +56,7 @@ The GUI was developed in Qt and is divided in two windows, one wraps the impleme
 The second viewer shows the graphical results for the image improvement and point cloud reconstruction, implementing a viewport based on OpenGL. There are radio buttons for the different algorithms introduced and their corresponding parameters which can be tuned in order to allow multiple combination tests. The check box named 'Fill Polygons' is included to change the viewing mode between point cloud and surface. One menu option exist also to load *.pcd* files to make possible test a single segmented plane.
 
 Two main classes in charge of all operations exist, one for the point cloud manipulation and plane extraction called PlaneDetection, and the other one designed for the geometrical transformations and image processing called Plane3DTransforms. In PlaneDetection is involved the previous implementation and is divided in three parts: one preamble to load the point cloud and preprocessing it by down-sampling and noise removal; one preparation stage, where the input parameters are received and the required algorithms instantiated as objects; and finally, the recursive part where the extraction of walls and ground planes are carry out using RANSAC.
+
+![Class diagram](fig_classdiag.png?raw=true "Class Diagram")
 
 The main task of the actual work is described by the class Plane3DTransforms, although the coordination between pass of parameters, algorithms calling and applying of recursions is provided by two methods in the class QtGLViewer, which can be seen as the *main()* function in a regular C++ implementation.
